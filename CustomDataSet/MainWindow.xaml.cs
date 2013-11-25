@@ -62,7 +62,9 @@ namespace CustomDataSet {
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e) {
-            this.createEdit.ThisTask = (sender as Button).Tag as ButtonTask;
+            var inspection = (sender as Button).Tag as ButtonTask;
+            this.createEdit.ThisTask = inspection;
+            this.AllButtons.Remove(inspection);
             this.creationTab.Focus();
             e.Handled = true;
         }
