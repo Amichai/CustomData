@@ -26,7 +26,9 @@ namespace CustomDataSet {
         PlotModel plot = new PlotModel();
         public DataView() {
             InitializeComponent();
+
             this.binSize.ItemsSource = Enum.GetValues(typeof(binType)).Cast<binType>();
+            this.binSize.SelectedItem = binType.Second;
             var xAxis = new DateTimeAxis();
             xAxis.Position = AxisPosition.Bottom;
             plot.Axes.Add(xAxis);
@@ -44,8 +46,11 @@ namespace CustomDataSet {
 
         private void update() {
             this.plot.Series.Clear();
-            foreach (var d in this.AllButtons) {
-                this.AddSeries(d.HitTimes, d.Name);
+            double minVal = double.MaxValue;
+            double maxVal = double.MinValue;
+            
+            foreach (var d in this.selectedTasks.SelectedItems.Cast<ButtonTask>()) {
+                this.AddSeries(d.HitTimes, d.Name, ref minVal, ref maxVal);
             }
         }
 
@@ -62,31 +67,11 @@ namespace CustomDataSet {
             return dateTime.AddTicks(halfIntervelTicks - ((dateTime.Ticks + halfIntervelTicks) % interval.Ticks));
         }
 
-        public void AddSeries(List<DateTime> hits, string name) {
+        public void AddSeries(List<DateTime> hits, string name, ref double minVal, ref double maxVal) {
             var s = new LineSeries();
             Dictionary<DateTime, int> idxCounter = new Dictionary<DateTime, int>();
             var xAxis = (this.plot.Axes[0] as DateTimeAxis);
 
-            switch (this.SelectedBinType) {
-                case binType.Day:
-                    xAxis.IntervalType = DateTimeIntervalType.Days;
-                    break;
-                case binType.Month:
-                    xAxis.IntervalType = DateTimeIntervalType.Months;
-                    break;
-                case binType.Year:
-                    xAxis.IntervalType = DateTimeIntervalType.Years;
-                    break;
-                case binType.Second:
-                    xAxis.IntervalType = DateTimeIntervalType.Seconds;
-                    break;
-                case binType.Minute:
-                    xAxis.IntervalType = DateTimeIntervalType.Minutes;
-                    break;
-                default:
-                    throw new Exception();
-
-            }
             xAxis.ShowMinorTicks = true;
             foreach (var h in hits) {
                 if (h < StartTime) {
@@ -109,6 +94,9 @@ namespace CustomDataSet {
                     case binType.Minute:
                         binIdx = Floor(h, TimeSpan.FromMinutes(1));
                         break;
+                    case binType.Hour:
+                        binIdx = Floor(h, TimeSpan.FromHours(1));
+                        break;
                     default:
                         throw new Exception();
 
@@ -120,8 +108,6 @@ namespace CustomDataSet {
                 }
             }
             List<IDataPoint> points = new List<IDataPoint>();
-            double minVal = double.MaxValue;
-            double maxVal = double.MinValue;
             foreach (var i in idxCounter) {
                 var asDouble = DateTimeAxis.ToDouble(i.Key);
                 if(asDouble < minVal){
@@ -182,11 +168,23 @@ namespace CustomDataSet {
             }
         }
 
-
-        TaskSet AllButtons;
+        private TaskSet _AllButtons;
+        public TaskSet AllButtons {
+            get { return _AllButtons; }
+            set {
+                if (_AllButtons != value) {
+                    _AllButtons = value;
+                    OnPropertyChanged("AllButtons");
+                }
+            }
+        }
 
         private void binSize_SelectionChanged_1(object sender, SelectionChangedEventArgs e) {
             this.SelectedBinType = (binType)(sender as ComboBox).SelectedItem;
+            update();
+        }
+
+        private void Refresh_Click_1(object sender, RoutedEventArgs e) {
             update();
         }
     }

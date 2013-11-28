@@ -27,27 +27,19 @@ namespace CustomDataSet {
             InitializeComponent();
             this.TaskSet = new TaskSet();
             var last = Properties.Settings.Default.LastFilepath;
+            dv = new DataView();
+            this.dataView.Content = dv;
+            dv.SetData(this.TaskSet);
             if (last != "") {
                 if (open(last)) {
                     this.SavePath = last;
                 }
             }
 
-            //this.TaskSet.Add(new ButtonTask() {
-            //    HitCount = 5,
-            //    Name = "Testing",
-            //    CompletedAfter = 50,
-            //    HitDisabled = TimeSpan.FromSeconds(0),
-            //    Description = "Full description here"
-            //});
-
             this.createEdit.NewTask.Subscribe(i => {
                 this.TaskSet.Add(i);
                 this.main.Focus();
             });
-            dv = new DataView();
-            this.dataView.Content = dv;
-
         }
 
         private string _SavePath;
@@ -85,7 +77,6 @@ namespace CustomDataSet {
 
         private void Hit_Click(object sender, RoutedEventArgs e) {
             ((sender as Button).Tag as ButtonTask).ButtonHit();
-            dv.SetData(this.TaskSet);
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e) {
@@ -100,6 +91,7 @@ namespace CustomDataSet {
         ///TODO: simple, medium and advanced button creation tools -> advanced tools allow completed tasks to spawn new buttons
         ///TODO: public and private access to a button
         ///TOOD: timeseries visualization
+        ///Todo: multiple time series
         ///Todo: our chart doesn't show zero hit values correctly
 
         private void Delete_Click(object sender, RoutedEventArgs e) {
@@ -122,6 +114,7 @@ namespace CustomDataSet {
                 this.TaskSet = TaskSet.FromXml(root);
                 Properties.Settings.Default.LastFilepath = path;
                 Properties.Settings.Default.Save();
+                dv.SetData(this.TaskSet);
                 return true;
             } catch {
                 return false;
