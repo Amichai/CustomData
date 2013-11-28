@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace CustomDataSet {
     /// <summary>
@@ -23,30 +25,52 @@ namespace CustomDataSet {
     public partial class MainWindow : Window, INotifyPropertyChanged {
         public MainWindow() {
             InitializeComponent();
-            this.AllButtons = new ObservableCollection<ButtonTask>();
+            this.TaskSet = new TaskSet();
+            var last = Properties.Settings.Default.LastFilepath;
+            if (last != "") {
+                if (open(last)) {
+                    this.SavePath = last;
+                }
+            }
 
-            this.AllButtons.Add(new ButtonTask() { 
-                HitCount = 5, 
-                Name = "Testing", 
-                CompletedAfter = 50,
-                HitDisabled = TimeSpan.FromSeconds(5),
-                Description = "Full description here" });
+            //this.TaskSet.Add(new ButtonTask() {
+            //    HitCount = 5,
+            //    Name = "Testing",
+            //    CompletedAfter = 50,
+            //    HitDisabled = TimeSpan.FromSeconds(0),
+            //    Description = "Full description here"
+            //});
 
             this.createEdit.NewTask.Subscribe(i => {
-                this.AllButtons.Add(i);
+                this.TaskSet.Add(i);
                 this.main.Focus();
             });
+            dv = new DataView();
+            this.dataView.Content = dv;
+
         }
 
-        private ObservableCollection<ButtonTask> _AllButtons;
-        public ObservableCollection<ButtonTask> AllButtons {
-            get { return _AllButtons; }
+        private string _SavePath;
+        public string SavePath {
+            get { return _SavePath; }
             set {
-                _AllButtons = value;
-                NotifyPropertyChanged();
+                if (_SavePath != value) {
+                    _SavePath = value;
+                    NotifyPropertyChanged("SavePath");
+                }
             }
         }
 
+        private TaskSet _TaskSet;
+        public TaskSet TaskSet {
+            get { return _TaskSet; }
+            set {
+                if (_TaskSet != value) {
+                    _TaskSet = value;
+                    NotifyPropertyChanged("TaskSet");
+                }
+            }
+        }
 
         #region INotifyPropertyChanged Implementation
         public event PropertyChangedEventHandler PropertyChanged;
@@ -57,22 +81,69 @@ namespace CustomDataSet {
         }
         #endregion INotifyPropertyChanged Implementation
 
+        DataView dv;
+
         private void Hit_Click(object sender, RoutedEventArgs e) {
             ((sender as Button).Tag as ButtonTask).ButtonHit();
+            dv.SetData(this.TaskSet);
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e) {
             var inspection = (sender as Button).Tag as ButtonTask;
             this.createEdit.ThisTask = inspection;
-            this.AllButtons.Remove(inspection);
+            this.TaskSet.Remove(inspection);
             this.creationTab.Focus();
             e.Handled = true;
         }
 
+        ///TODO: produce a url for registering hits
+        ///TODO: simple, medium and advanced button creation tools -> advanced tools allow completed tasks to spawn new buttons
+        ///TODO: public and private access to a button
+        ///TOOD: timeseries visualization
+        ///Todo: our chart doesn't show zero hit values correctly
+
         private void Delete_Click(object sender, RoutedEventArgs e) {
             var toRemove = (sender as Button).Tag as ButtonTask;
-            this.AllButtons.Remove(toRemove);
+            this.TaskSet.Remove(toRemove);
             e.Handled = true;
+        }
+
+        private void Open_Click_1(object sender, RoutedEventArgs e) {
+            var ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            var name = ofd.FileName;
+            this.SavePath = name;
+            open(name);
+        }
+
+        private bool open(string path) {
+            try {
+                var root = XElement.Load(path);
+                this.TaskSet = TaskSet.FromXml(root);
+                Properties.Settings.Default.LastFilepath = path;
+                Properties.Settings.Default.Save();
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        private void Save_Click_1(object sender, RoutedEventArgs e) {
+            string name;
+            if (string.IsNullOrEmpty(this.SavePath)) {
+                var ofd = new SaveFileDialog();
+                ofd.ShowDialog();
+                name = ofd.FileName;
+            } else {
+                name = this.SavePath;
+            }
+            if (string.IsNullOrEmpty(name)) {
+                return;
+            }
+            this.SavePath = name;
+            this.TaskSet.ToXml().Save(name);
+            Properties.Settings.Default.LastFilepath = name;
+            Properties.Settings.Default.Save();
         }
     }
 }

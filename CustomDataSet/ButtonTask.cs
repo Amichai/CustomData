@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CustomDataSet {
     public class ButtonTask : INotifyPropertyChanged {
@@ -13,6 +14,7 @@ namespace CustomDataSet {
             this.CompletedAfter = 1;
             this.Enabled = true;
             this.HitCount = 0;
+            this.HitTimes = new List<DateTime>();
         }
 
         private string _Name;
@@ -32,6 +34,8 @@ namespace CustomDataSet {
                 NotifyPropertyChanged();
             }
         }
+        
+        public List<DateTime> HitTimes;
 
         private int _CompletedAfter;
         public int CompletedAfter {
@@ -92,6 +96,7 @@ namespace CustomDataSet {
         private Timer disabledTimer;
 
         public void ButtonHit() {
+            this.HitTimes.Add(DateTime.Now);
             this.HitCount++;
             this.Enabled = false;
             this.disabledTimer = new Timer(state => { this.Enabled = true; }, null, this.HitDisabled, TimeSpan.FromMilliseconds(-1));
@@ -105,5 +110,38 @@ namespace CustomDataSet {
             }
         }
         #endregion INotifyPropertyChanged Implementation
+
+        internal XElement ToXml() {
+            XElement task = new XElement("Task");
+            task.Add(new XAttribute("Name", this.Name));
+            task.Add(new XAttribute("Description", this.Description));
+            task.Add(new XAttribute("HitCount", this.HitCount));
+            task.Add(new XAttribute("CompletedAfter", this.CompletedAfter));
+            task.Add(new XAttribute("CompletionDisabled", this.CompletionDisabled.ToString("c")));
+            task.Add(new XAttribute("HitDisabled", this.HitDisabled.ToString("c")));
+            XElement hitTimes = new XElement("HitTimes");
+            foreach (var h in this.HitTimes) {
+                XElement hitTime = new XElement("Hit");
+                hitTime.Add(new XAttribute("Time", h.ToString()));
+                hitTimes.Add(hitTime);
+            }
+            task.Add(hitTimes);
+            return task;
+        }
+
+        internal static ButtonTask FromXml(XElement t) {
+            var toReturn = new ButtonTask();
+            toReturn.Name = t.Attribute("Name").Value;
+            toReturn.Description = t.Attribute("Description").Value;
+            toReturn.HitCount = int.Parse(t.Attribute("HitCount").Value);
+            toReturn.CompletedAfter = int.Parse(t.Attribute("CompletedAfter").Value);
+            toReturn.CompletionDisabled = TimeSpan.Parse(t.Attribute("CompletionDisabled").Value);
+            toReturn.HitDisabled = TimeSpan.Parse(t.Attribute("HitDisabled").Value);
+            XElement hitTimesRoot = t.Element("HitTimes");
+            foreach (var hitTimeRoot in hitTimesRoot.Elements("Hit")) {
+                toReturn.HitTimes.Add(DateTime.Parse(hitTimeRoot.Attribute("Time").Value));
+            }
+            return toReturn;
+        }
     }
 }
