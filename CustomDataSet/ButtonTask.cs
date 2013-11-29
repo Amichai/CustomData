@@ -15,7 +15,10 @@ namespace CustomDataSet {
             this.Enabled = true;
             this.HitCount = 0;
             this.HitTimes = new List<DateTime>();
+            this.ID = null;
         }
+
+        public int? ID { get; set; }
 
         private string _Name;
         public string Name {
@@ -143,5 +146,7 @@ namespace CustomDataSet {
             }
             return toReturn;
         }
+
+        public int? Visibility { get; set; }
     }
 }

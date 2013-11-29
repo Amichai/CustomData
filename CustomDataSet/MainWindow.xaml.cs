@@ -25,32 +25,32 @@ namespace CustomDataSet {
     public partial class MainWindow : Window, INotifyPropertyChanged {
         public MainWindow() {
             InitializeComponent();
+
             this.TaskSet = new TaskSet();
             var last = Properties.Settings.Default.LastFilepath;
             dv = new DataView();
             this.dataView.Content = dv;
-            dv.SetData(this.TaskSet);
-            if (last != "") {
-                if (open(last)) {
-                    this.SavePath = last;
-                }
+            var db = DataUtil.GetDataContext();
+            this.currentUser = db.Users.First();
+            foreach (var t in db.Tasks) {
+                this.TaskSet.Add(new ButtonTask() {
+                    ID = t.ID,
+                    CompletedAfter = t.CompletedAfter.Value,
+                    CompletionDisabled = TimeSpan.FromTicks(t.CompletionDisabled.Value),
+                    Description = t.Description,
+                    HitCount = t.HitCount,
+                    HitDisabled = TimeSpan.FromTicks(t.HitDisabled.Value),
+                    Name = t.Name,
+                    Visibility = t.Visibility
+                });
+
             }
 
             this.createEdit.NewTask.Subscribe(i => {
                 this.TaskSet.Add(i);
+                DataUtil.AddOrUpdateTask(i);
                 this.main.Focus();
             });
-        }
-
-        private string _SavePath;
-        public string SavePath {
-            get { return _SavePath; }
-            set {
-                if (_SavePath != value) {
-                    _SavePath = value;
-                    NotifyPropertyChanged("SavePath");
-                }
-            }
         }
 
         private TaskSet _TaskSet;
@@ -74,9 +74,12 @@ namespace CustomDataSet {
         #endregion INotifyPropertyChanged Implementation
 
         DataView dv;
+        User currentUser;
 
         private void Hit_Click(object sender, RoutedEventArgs e) {
-            ((sender as Button).Tag as ButtonTask).ButtonHit();
+            var task = ((sender as Button).Tag as ButtonTask);
+            DataUtil.ButtonHit(task, currentUser);
+            task.ButtonHit();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e) {
@@ -90,53 +93,13 @@ namespace CustomDataSet {
         ///TODO: produce a url for registering hits
         ///TODO: simple, medium and advanced button creation tools -> advanced tools allow completed tasks to spawn new buttons
         ///TODO: public and private access to a button
-        ///TOOD: timeseries visualization
-        ///Todo: multiple time series
         ///Todo: our chart doesn't show zero hit values correctly
 
         private void Delete_Click(object sender, RoutedEventArgs e) {
             var toRemove = (sender as Button).Tag as ButtonTask;
+            DataUtil.RemoveTask(toRemove);
             this.TaskSet.Remove(toRemove);
             e.Handled = true;
-        }
-
-        private void Open_Click_1(object sender, RoutedEventArgs e) {
-            var ofd = new OpenFileDialog();
-            ofd.ShowDialog();
-            var name = ofd.FileName;
-            this.SavePath = name;
-            open(name);
-        }
-
-        private bool open(string path) {
-            try {
-                var root = XElement.Load(path);
-                this.TaskSet = TaskSet.FromXml(root);
-                Properties.Settings.Default.LastFilepath = path;
-                Properties.Settings.Default.Save();
-                dv.SetData(this.TaskSet);
-                return true;
-            } catch {
-                return false;
-            }
-        }
-
-        private void Save_Click_1(object sender, RoutedEventArgs e) {
-            string name;
-            if (string.IsNullOrEmpty(this.SavePath)) {
-                var ofd = new SaveFileDialog();
-                ofd.ShowDialog();
-                name = ofd.FileName;
-            } else {
-                name = this.SavePath;
-            }
-            if (string.IsNullOrEmpty(name)) {
-                return;
-            }
-            this.SavePath = name;
-            this.TaskSet.ToXml().Save(name);
-            Properties.Settings.Default.LastFilepath = name;
-            Properties.Settings.Default.Save();
         }
     }
 }

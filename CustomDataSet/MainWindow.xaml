@@ -20,17 +20,17 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Row="0" Grid.Column="0" Margin="5" Text="{Binding SavePath}"></TextBox>
-                    <Button Grid.Row="0" Grid.Column="1" Width="80" Margin="5" Click="Open_Click_1">Open</Button>
-                    <Button Grid.Row="0" Grid.Column="2" Width="80" Margin="5" Click="Save_Click_1">Save</Button>
+                    <TextBlock Grid.Column="0" Margin="5">User:</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding SavePath}"></TextBox>
+                    <Button Grid.Row="0" Grid.Column="2" Width="80" Margin="5" >Login</Button>
                     <ItemsControl ItemsSource="{Binding TaskSet}" Grid.Row="1" Grid.ColumnSpan="4">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Tag="{Binding}" Click="Hit_Click" HorizontalContentAlignment="Stretch" IsEnabled="{Binding Enabled}">
+                            <Button Tag="{Binding}" Click="Hit_Click" Margin="5" HorizontalContentAlignment="Stretch" IsEnabled="{Binding Enabled}">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>

@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TaskCollectorModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TaskCollectorModelStoreContainer">
+          <EntitySet Name="TaskHit" EntityType="TaskCollectorModel.Store.TaskHit" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TaskRelationships" EntityType="TaskCollectorModel.Store.TaskRelationships" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tasks" EntityType="TaskCollectorModel.Store.Tasks" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TaskSource" EntityType="TaskCollectorModel.Store.TaskSource" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TaskVisibilities" EntityType="TaskCollectorModel.Store.TaskVisibilities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="TaskCollectorModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserTask" EntityType="TaskCollectorModel.Store.UserTask" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Task_0" Association="TaskCollectorModel.Store.FK_Task_0">
+            <End Role="TaskVisibilities" EntitySet="TaskVisibilities" />
+            <End Role="Tasks" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskHit_0" Association="TaskCollectorModel.Store.FK_TaskHit_0">
+            <End Role="Tasks" EntitySet="Tasks" />
+            <End Role="TaskHit" EntitySet="TaskHit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskHit_1" Association="TaskCollectorModel.Store.FK_TaskHit_1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="TaskHit" EntitySet="TaskHit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTask_0" Association="TaskCollectorModel.Store.FK_UserTask_0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserTask" EntitySet="UserTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTask_1" Association="TaskCollectorModel.Store.FK_UserTask_1">
+            <End Role="Tasks" EntitySet="Tasks" />
+            <End Role="UserTask" EntitySet="UserTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTask_2" Association="TaskCollectorModel.Store.FK_UserTask_2">
+            <End Role="TaskRelationships" EntitySet="TaskRelationships" />
+            <End Role="UserTask" EntitySet="UserTask" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TaskHit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Task" Type="int" Nullable="false" />
+          <Property Name="User" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskRelationships">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Tasks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="80" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="HitCount" Type="int" Nullable="false" />
+          <Property Name="CompletedAfter" Type="int" />
+          <Property Name="HitDisabled" Type="bigint" />
+          <Property Name="CompletionDisabled" Type="bigint" />
+          <Property Name="Visibility" Type="int" />
+        </EntityType>
+        <EntityType Name="TaskSource">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="80" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="CompletedAfter" Type="int" />
+          <Property Name="HitDisabled" Type="bigint" />
+          <Property Name="CompletionDisabled" Type="bigint" />
+          <Property Name="Visibility" Type="int" />
+        </EntityType>
+        <EntityType Name="TaskVisibilities">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAddress" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CreationTime" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="User" Type="int" Nullable="false" />
+          <Property Name="Task" Type="int" Nullable="false" />
+          <Property Name="Relationship" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Task_0">
+          <End Role="TaskVisibilities" Type="TaskCollectorModel.Store.TaskVisibilities" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tasks" Type="TaskCollectorModel.Store.Tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskVisibilities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tasks">
+              <PropertyRef Name="Visibility" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskHit_0">
+          <End Role="Tasks" Type="TaskCollectorModel.Store.Tasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TaskHit" Type="TaskCollectorModel.Store.TaskHit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskHit">
+              <PropertyRef Name="Task" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskHit_1">
+          <End Role="Users" Type="TaskCollectorModel.Store.Users" Multiplicity="1" />
+          <End Role="TaskHit" Type="TaskCollectorModel.Store.TaskHit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskHit">
+              <PropertyRef Name="User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTask_0">
+          <End Role="Users" Type="TaskCollectorModel.Store.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserTask" Type="TaskCollectorModel.Store.UserTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserTask">
+              <PropertyRef Name="User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTask_1">
+          <End Role="Tasks" Type="TaskCollectorModel.Store.Tasks" Multiplicity="1" />
+          <End Role="UserTask" Type="TaskCollectorModel.Store.UserTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserTask">
+              <PropertyRef Name="Task" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTask_2">
+          <End Role="TaskRelationships" Type="TaskCollectorModel.Store.TaskRelationships" Multiplicity="1" />
+          <End Role="UserTask" Type="TaskCollectorModel.Store.UserTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskRelationships">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserTask">
+              <PropertyRef Name="Relationship" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TaskCollectorModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TaskCollectorEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="TaskHits" EntityType="TaskCollectorModel.TaskHit" />
+          <EntitySet Name="TaskRelationships" EntityType="TaskCollectorModel.TaskRelationship" />
+          <EntitySet Name="Tasks" EntityType="TaskCollectorModel.Task" />
+          <EntitySet Name="TaskSources" EntityType="TaskCollectorModel.TaskSource" />
+          <EntitySet Name="TaskVisibilities" EntityType="TaskCollectorModel.TaskVisibility" />
+          <EntitySet Name="Users" EntityType="TaskCollectorModel.User" />
+          <EntitySet Name="UserTasks" EntityType="TaskCollectorModel.UserTask" />
+          <AssociationSet Name="FK_TaskHit_0" Association="TaskCollectorModel.FK_TaskHit_0">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="TaskHit" EntitySet="TaskHits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskHit_1" Association="TaskCollectorModel.FK_TaskHit_1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TaskHit" EntitySet="TaskHits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTask_2" Association="TaskCollectorModel.FK_UserTask_2">
+            <End Role="TaskRelationship" EntitySet="TaskRelationships" />
+            <End Role="UserTask" EntitySet="UserTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_0" Association="TaskCollectorModel.FK_Task_0">
+            <End Role="TaskVisibility" EntitySet="TaskVisibilities" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTask_1" Association="TaskCollectorModel.FK_UserTask_1">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="UserTask" EntitySet="UserTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTask_0" Association="TaskCollectorModel.FK_UserTask_0">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserTask" EntitySet="UserTasks" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TaskHit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Task" Nullable="false" />
+          <Property Type="Int32" Name="User" Nullable="false" />
+          <Property Type="DateTime" Name="Timestamp" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Task1" Relationship="TaskCollectorModel.FK_TaskHit_0" FromRole="TaskHit" ToRole="Task" />
+          <NavigationProperty Name="User1" Relationship="TaskCollectorModel.FK_TaskHit_1" FromRole="TaskHit" ToRole="User" />
+        </EntityType>
+        <EntityType Name="TaskRelationship">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserTasks" Relationship="TaskCollectorModel.FK_UserTask_2" FromRole="TaskRelationship" ToRole="UserTask" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="HitCount" Nullable="false" />
+          <Property Type="Int32" Name="CompletedAfter" />
+          <Property Type="Int64" Name="HitDisabled" />
+          <Property Type="Int64" Name="CompletionDisabled" />
+          <Property Type="Int32" Name="Visibility" />
+          <NavigationProperty Name="TaskHits" Relationship="TaskCollectorModel.FK_TaskHit_0" FromRole="Task" ToRole="TaskHit" />
+          <NavigationProperty Name="TaskVisibility" Relationship="TaskCollectorModel.FK_Task_0" FromRole="Task" ToRole="TaskVisibility" />
+          <NavigationProperty Name="UserTasks" Relationship="TaskCollectorModel.FK_UserTask_1" FromRole="Task" ToRole="UserTask" />
+        </EntityType>
+        <EntityType Name="TaskSource">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="CompletedAfter" />
+          <Property Type="Int64" Name="HitDisabled" />
+          <Property Type="Int64" Name="CompletionDisabled" />
+          <Property Type="Int32" Name="Visibility" />
+        </EntityType>
+        <EntityType Name="TaskVisibility">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tasks" Relationship="TaskCollectorModel.FK_Task_0" FromRole="TaskVisibility" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="EmailAddress" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreationTime" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <NavigationProperty Name="TaskHits" Relationship="TaskCollectorModel.FK_TaskHit_1" FromRole="User" ToRole="TaskHit" />
+          <NavigationProperty Name="UserTasks" Relationship="TaskCollectorModel.FK_UserTask_0" FromRole="User" ToRole="UserTask" />
+        </EntityType>
+        <EntityType Name="UserTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="User" Nullable="false" />
+          <Property Type="Int32" Name="Task" Nullable="false" />
+          <Property Type="Int32" Name="Relationship" Nullable="false" />
+          <NavigationProperty Name="TaskRelationship" Relationship="TaskCollectorModel.FK_UserTask_2" FromRole="UserTask" ToRole="TaskRelationship" />
+          <NavigationProperty Name="Task1" Relationship="TaskCollectorModel.FK_UserTask_1" FromRole="UserTask" ToRole="Task" />
+          <NavigationProperty Name="User1" Relationship="TaskCollectorModel.FK_UserTask_0" FromRole="UserTask" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_TaskHit_0">
+          <End Type="TaskCollectorModel.Task" Role="Task" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TaskCollectorModel.TaskHit" Role="TaskHit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskHit">
+              <PropertyRef Name="Task" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskHit_1">
+          <End Type="TaskCollectorModel.User" Role="User" Multiplicity="1" />
+          <End Type="TaskCollectorModel.TaskHit" Role="TaskHit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskHit">
+              <PropertyRef Name="User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTask_2">
+          <End Type="TaskCollectorModel.TaskRelationship" Role="TaskRelationship" Multiplicity="1" />
+          <End Type="TaskCollectorModel.UserTask" Role="UserTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskRelationship">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserTask">
+              <PropertyRef Name="Relationship" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_0">
+          <End Type="TaskCollectorModel.TaskVisibility" Role="TaskVisibility" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TaskCollectorModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskVisibility">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="Visibility" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTask_1">
+          <End Type="TaskCollectorModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="TaskCollectorModel.UserTask" Role="UserTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserTask">
+              <PropertyRef Name="Task" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTask_0">
+          <End Type="TaskCollectorModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TaskCollectorModel.UserTask" Role="UserTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserTask">
+              <PropertyRef Name="User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TaskCollectorModelStoreContainer" CdmEntityContainer="TaskCollectorEntities">
+          <EntitySetMapping Name="TaskHits">
+            <EntityTypeMapping TypeName="TaskCollectorModel.TaskHit">
+              <MappingFragment StoreEntitySet="TaskHit">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="Task" ColumnName="Task" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskRelationships">
+            <EntityTypeMapping TypeName="TaskCollectorModel.TaskRelationship">
+              <MappingFragment StoreEntitySet="TaskRelationships">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tasks">
+            <EntityTypeMapping TypeName="TaskCollectorModel.Task">
+              <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="Visibility" ColumnName="Visibility" />
+                <ScalarProperty Name="CompletionDisabled" ColumnName="CompletionDisabled" />
+                <ScalarProperty Name="HitDisabled" ColumnName="HitDisabled" />
+                <ScalarProperty Name="CompletedAfter" ColumnName="CompletedAfter" />
+                <ScalarProperty Name="HitCount" ColumnName="HitCount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskSources">
+            <EntityTypeMapping TypeName="TaskCollectorModel.TaskSource">
+              <MappingFragment StoreEntitySet="TaskSource">
+                <ScalarProperty Name="Visibility" ColumnName="Visibility" />
+                <ScalarProperty Name="CompletionDisabled" ColumnName="CompletionDisabled" />
+                <ScalarProperty Name="HitDisabled" ColumnName="HitDisabled" />
+                <ScalarProperty Name="CompletedAfter" ColumnName="CompletedAfter" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskVisibilities">
+            <EntityTypeMapping TypeName="TaskCollectorModel.TaskVisibility">
+              <MappingFragment StoreEntitySet="TaskVisibilities">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="TaskCollectorModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreationTime" ColumnName="CreationTime" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTasks">
+            <EntityTypeMapping TypeName="TaskCollectorModel.UserTask">
+              <MappingFragment StoreEntitySet="UserTask">
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="Task" ColumnName="Task" />
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

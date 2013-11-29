@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0d41fcb083e04c02814314a85d1cbce4" Name="Diagram1">
+        <EntityTypeShape EntityType="TaskCollectorModel.TaskHit" Width="1.5" PointX="1.2682357343231494" PointY="3.0884799524622411" />
+        <EntityTypeShape EntityType="TaskCollectorModel.TaskRelationship" Width="1.5" PointX="4.6270679275631288" PointY="21.942465270842643" />
+        <EntityTypeShape EntityType="TaskCollectorModel.Task" Width="1.5" PointX="6.6155842945983556" PointY="21.638826261106331" />
+        <EntityTypeShape EntityType="TaskCollectorModel.TaskSource" Width="1.5" PointX="3.1775226198032138" PointY="29.278325258418139" />
+        <EntityTypeShape EntityType="TaskCollectorModel.TaskVisibility" Width="1.5" PointX="6.5670553103867242" PointY="2.0151219228352986" />
+        <EntityTypeShape EntityType="TaskCollectorModel.User" Width="1.5" PointX="10.551695146854826" PointY="13.054333052157579" />
+        <EntityTypeShape EntityType="TaskCollectorModel.UserTask" Width="1.5" PointX="5.3243320832607957" PointY="29.416210083950407" />
+        <AssociationConnector Association="TaskCollectorModel.FK_TaskHit_0" />
+        <AssociationConnector Association="TaskCollectorModel.FK_TaskHit_1" />
+        <AssociationConnector Association="TaskCollectorModel.FK_UserTask_2" />
+        <AssociationConnector Association="TaskCollectorModel.FK_Task_0" />
+        <AssociationConnector Association="TaskCollectorModel.FK_UserTask_1" />
+        <AssociationConnector Association="TaskCollectorModel.FK_UserTask_0" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
