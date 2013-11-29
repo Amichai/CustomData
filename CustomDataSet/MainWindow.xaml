@@ -27,7 +27,8 @@
                     <TextBlock Grid.Column="0" Margin="5">User:</TextBlock>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding SavePath}"></TextBox>
                     <Button Grid.Row="0" Grid.Column="2" Width="80" Margin="5" >Login</Button>
-                    <ItemsControl ItemsSource="{Binding TaskSet}" Grid.Row="1" Grid.ColumnSpan="4">
+                    <ScrollViewer Grid.Row="1" Grid.ColumnSpan="4">
+                        <ItemsControl ItemsSource="{Binding TaskSet}" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Tag="{Binding}" Click="Hit_Click" Margin="5" HorizontalContentAlignment="Stretch" IsEnabled="{Binding Enabled}">
@@ -59,6 +60,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="Create" Name="creationTab" DataContext="{Binding NewestTask}">

@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
             <oxy:Plot Name="root"  Grid.Column="0"/>
             <GridSplitter Grid.Column="1"  ResizeDirection="Columns" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-            <ListView Grid.Column="2" ItemsSource="{Binding AllButtons}" Name="selectedTasks" >
+            <ListView Grid.Column="2" ItemsSource="{Binding AllTasks}" Name="selectedTasks" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

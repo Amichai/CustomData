@@ -48,7 +48,7 @@ namespace CustomDataSet {
 
             this.createEdit.NewTask.Subscribe(i => {
                 this.TaskSet.Add(i);
-                DataUtil.AddOrUpdateTask(i);
+                DataUtil.AddOrUpdateTask(i, this.currentUser);
                 this.main.Focus();
             });
         }
@@ -90,6 +90,7 @@ namespace CustomDataSet {
             e.Handled = true;
         }
 
+        ///TODO: get the list of buttons by db query, don't duplicate the store...
         ///TODO: produce a url for registering hits
         ///TODO: simple, medium and advanced button creation tools -> advanced tools allow completed tasks to spawn new buttons
         ///TODO: public and private access to a button

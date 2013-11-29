@@ -20,7 +20,7 @@ namespace CustomDataSet {
             dest.TaskVisibility = vis;
         }
 
-        internal static void AddOrUpdateTask(ButtonTask t) {
+        internal static void AddOrUpdateTask(ButtonTask t, User user) {
             var db = GetDataContext();
             TaskVisibility vis = db.TaskVisibilities.First();
             if(t.ID != null){
@@ -38,6 +38,14 @@ namespace CustomDataSet {
             Set(newTask, t, vis);
             db.Tasks.Add(newTask);
             db.SaveChanges();
+            var relationship = db.TaskRelationships.First();
+            db.UserTasks.Add(new UserTask() {
+                User = user.ID,
+                Task = newTask.ID,
+                TaskRelationship = relationship
+            });
+            db.SaveChanges();
+
             t.ID = newTask.ID;
         }
 
@@ -57,6 +65,11 @@ namespace CustomDataSet {
                 User = user.ID
             });
             db.SaveChanges();
+        }
+
+        internal static List<DateTime> GetHitsForTask(Task d) {
+            var db = GetDataContext();
+            return db.TaskHits.Where(i => i.Task == d.ID).Select(i => i.Timestamp).ToList();
         }
     }
 }

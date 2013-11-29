@@ -26,6 +26,8 @@ namespace CustomDataSet {
         PlotModel plot = new PlotModel();
         public DataView() {
             InitializeComponent();
+            var db = DataUtil.GetDataContext();
+            this.CurrentUser = db.Users.First();
 
             this.binSize.ItemsSource = Enum.GetValues(typeof(binType)).Cast<binType>();
             this.binSize.SelectedItem = binType.Second;
@@ -36,12 +38,6 @@ namespace CustomDataSet {
             yAxis.Position = AxisPosition.Left;
             plot.Axes.Add(yAxis);
             this.root.Model = plot;
-            //this.AllButtons = allData;
-            //update();
-        }
-
-        public void SetData(TaskSet allData) {
-            this.AllButtons = allData;
         }
 
         private void update() {
@@ -49,9 +45,11 @@ namespace CustomDataSet {
             double minVal = double.MaxValue;
             double maxVal = double.MinValue;
             
-            foreach (var d in this.selectedTasks.SelectedItems.Cast<ButtonTask>()) {
-                this.AddSeries(d.HitTimes, d.Name, ref minVal, ref maxVal);
+            foreach (var d in this.selectedTasks.SelectedItems.Cast<Task>()) {
+                var hitTimes = DataUtil.GetHitsForTask(d);
+                this.AddSeries(hitTimes, d.Name, ref minVal, ref maxVal);
             }
+            OnPropertyChanged("AllTasks");
         }
 
         private DateTime Floor(DateTime dateTime, TimeSpan interval) {
@@ -168,16 +166,37 @@ namespace CustomDataSet {
             }
         }
 
-        private TaskSet _AllButtons;
-        public TaskSet AllButtons {
-            get { return _AllButtons; }
-            set {
-                if (_AllButtons != value) {
-                    _AllButtons = value;
-                    OnPropertyChanged("AllButtons");
-                }
+        private User _currentUser;
+
+        public User CurrentUser {
+            get { return _currentUser; }
+            set { 
+                _currentUser = value;
+                OnPropertyChanged("AllTasks");
             }
         }
+        
+        public List<Task> AllTasks {
+            get {
+                if (CurrentUser == null) {
+                    return new List<Task>();
+                }
+                var db = DataUtil.GetDataContext();
+                var toReturn = db.UserTasks.Where(i => i.User == CurrentUser.ID).Select(i => i.Task1).ToList();
+                return toReturn;
+            }
+        }
+
+        //private TaskSet _AllButtons;
+        //public TaskSet AllButtons {
+        //    get { return _AllButtons; }
+        //    set {
+        //        if (_AllButtons != value) {
+        //            _AllButtons = value;
+        //            OnPropertyChanged("AllButtons");
+        //        }
+        //    }
+        //}
 
         private void binSize_SelectionChanged_1(object sender, SelectionChangedEventArgs e) {
             this.SelectedBinType = (binType)(sender as ComboBox).SelectedItem;
