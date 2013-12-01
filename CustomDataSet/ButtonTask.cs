@@ -45,6 +45,7 @@ namespace CustomDataSet {
             get { return _CompletedAfter; }
             set {
                 _CompletedAfter = value;
+                this.Enabled = ProgressVal < 100;
                 NotifyPropertyChanged();
             }
         }
@@ -52,9 +53,7 @@ namespace CustomDataSet {
         public double ProgressVal {
             get {
                 var val = HitCount * 100 / (double)CompletedAfter;
-                if (val >= 100) {
-                    this.Enabled = false;
-                }
+                this.Enabled = val < 100;
                 return val;
             }
         }
@@ -101,8 +100,10 @@ namespace CustomDataSet {
         public void ButtonHit() {
             this.HitTimes.Add(DateTime.Now);
             this.HitCount++;
-            this.Enabled = false;
-            this.disabledTimer = new Timer(state => { this.Enabled = true; }, null, this.HitDisabled, TimeSpan.FromMilliseconds(-1));
+            if (this.Enabled) {
+                this.Enabled = false;
+                this.disabledTimer = new Timer(state => { this.Enabled = true; }, null, this.HitDisabled, TimeSpan.FromMilliseconds(-1));
+            }
         }
 
         #region INotifyPropertyChanged Implementation

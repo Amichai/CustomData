@@ -32,7 +32,7 @@ namespace CustomDataSet {
             this.dataView.Content = dv;
             var db = DataUtil.GetDataContext();
             this.currentUser = db.Users.First();
-            foreach (var t in db.Tasks) {
+            foreach (var t in db.Tasks.Where(i => i.Visibility != 2)) {
                 this.TaskSet.Add(new ButtonTask() {
                     ID = t.ID,
                     CompletedAfter = t.CompletedAfter.Value,
@@ -43,7 +43,6 @@ namespace CustomDataSet {
                     Name = t.Name,
                     Visibility = t.Visibility
                 });
-
             }
 
             this.createEdit.NewTask.Subscribe(i => {

@@ -52,7 +52,7 @@ namespace CustomDataSet {
         internal static void RemoveTask(ButtonTask toRemove) {
             var db = GetDataContext();
             var r = db.Tasks.Where(i => i.ID == toRemove.ID).Single();
-            db.Tasks.Remove(r);
+            r.Visibility = 2;
             db.SaveChanges();
         }
 

@@ -9,6 +9,19 @@ using System.Xml.Linq;
 
 namespace CustomDataSet {
     public class TaskSet : ObservableCollection<ButtonTask> {
+        private void sort() {
+            var ordered = this.OrderBy(i => i.ProgressVal).ToList();
+            this.Clear();
+            foreach (var b in ordered) {
+                base.Add(b);
+            }
+        }
+
+        public new void Add(ButtonTask t) {
+            base.Add(t);
+            this.sort();
+        }
+
         public XElement ToXml() {
             XElement root = new XElement("TaskSet");
             foreach (var t in this) {
