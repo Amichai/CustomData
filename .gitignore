@@ -2,3 +2,5 @@ CustomDataSet/bin/
 CustomDataSet/obj/
 packages/
 CustomDataSet.v11.suo
+CDS.Web/bin
+CDS.Web/obj/

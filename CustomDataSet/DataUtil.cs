@@ -56,15 +56,19 @@ namespace CustomDataSet {
             db.SaveChanges();
         }
 
+        private static TaskFactory tf = new TaskFactory();
+
         internal static void ButtonHit(ButtonTask task, User user) {
-            var db = GetDataContext();
-            db.Tasks.Where(i => i.ID == task.ID).Single().HitCount++;
-            db.TaskHits.Add(new TaskHit() {
-                Task = task.ID.Value,
-                Timestamp = DateTime.Now,
-                User = user.ID
+            tf.StartNew(() => {
+                var db = GetDataContext();
+                db.Tasks.Where(i => i.ID == task.ID).Single().HitCount++;
+                db.TaskHits.Add(new TaskHit() {
+                    Task = task.ID.Value,
+                    Timestamp = DateTime.Now,
+                    User = user.ID
+                });
+                db.SaveChanges();
             });
-            db.SaveChanges();
         }
 
         internal static List<DateTime> GetHitsForTask(Task d) {

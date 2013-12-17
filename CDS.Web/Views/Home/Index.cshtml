@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<style type="text/css">
+    .inputButton {
+        text-align: center;
+        border: 2px solid black;
+        margin: 15px;
+        background-color: lightgray;
+        -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;
+    }
+
+    .adjBtns {
+        padding-top:37px;
+    }
+
+    .padding {
+        padding: 10px;
+        margin:10px;
+    }
+
+    .navTab {
+        font-size:30px;
+    }
+
+    #progressbar {
+        background-color: black;
+        padding: 1px;
+    }
+
+        #progressbar > div {
+            background-color: lawngreen;
+            /*width: 40%; /* Adjust with JavaScript */
+            height: 10px;
+        }
+</style>
+
+<!doctype html>
+<html ng-app>
+<head>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/AngularControllers/MainController.js"></script>
+</head>
+<body>
+    <div ng-controller="TodoCtrl">
+        <ul class="nav nav-tabs">
+            <li class="{{home_active}}" ng-click="home()"><a href="#" class="navTab">Home</a></li>
+            <li class="{{create_active}}" ng-click="create()"><a href="#" class="navTab">New</a></li>
+            <li class="{{data_active}}" ng-click="data()"><a href="#" class="navTab">Data</a></li>
+        </ul>
+        <div id="home" ng:show="home_active == 'active'">
+            <div ng-repeat="task in Tasks">
+                <div class="row">
+                    <div class="col-md-1 adjBtns" style="vertical-align:central" unselectable='on'
+                        onselectstart="return false;" onmousedown="return false;">
+                        <button type="button" class="btn btn-default b  tn-lg">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </button><br />
+                        <button type="button" class="btn btn-default btn-lg">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </button>
+                    </div>                    
+                    <div class="inputButton col-md-4" ng-click="taskClick(task)">
+                        <h3>{{task.Name}}</h3>
+                        <p>{{task.Description}}</p>
+                        <p>{{task.HitCount}} / {{task.CompletedAfter}}</p>
+                        <div id="progressbar">
+                            <div ng-if="task.ProgressVal <= 100" ng-style="{ width: task.ProgressVal + '%' }"></div>
+                            <div ng-if="task.ProgressVal > 100" style="width:100%"></div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 adjBtns">
+                        <button type="button" class="btn btn-default btn-lg" ng-click="edit(task)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button><br />
+                        <button type="button" class="btn btn-default btn-lg" ng-click="deleteTask(task)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="create" ng:show="create_active == 'active'" class="padding">
+            <div class="row">
+                <div class="col-md-2">Name:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.Name" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">Description:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.Description" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">Completed after:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.CompletedAfter" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">Hit Count:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.HitCount" />
+                </div>
+            </div>
+
+            <button type="button" class="btn padding"  ng-click="submitTask()">Save Changes / Create</button>
+        </div>
+
+
+        <div id="data" ng:show="data_active == 'active'">
+            <h2>testing2</h2>
+        </div>
+    </div>
+</body>
+</html>
