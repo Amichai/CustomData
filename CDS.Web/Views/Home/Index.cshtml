@@ -23,7 +23,8 @@
     }
 
     .navTab {
-        font-size:30px;
+        font-size:20px;
+        font-weight:bold;
     }
 
     #progressbar {
@@ -56,10 +57,10 @@
                 <div class="row">
                     <div class="col-md-1 adjBtns" style="vertical-align:central" unselectable='on'
                         onselectstart="return false;" onmousedown="return false;">
-                        <button type="button" class="btn btn-default b  tn-lg">
+                        <button type="button" class="btn btn-default" ng-click="moveUp(task)">
                             <span class="glyphicon glyphicon-arrow-up"></span>
                         </button><br />
-                        <button type="button" class="btn btn-default btn-lg">
+                        <button type="button" class="btn btn-default" ng-click="moveDown(task)">
                             <span class="glyphicon glyphicon-arrow-down"></span>
                         </button>
                     </div>                    
@@ -74,10 +75,10 @@
                         </div>
                     </div>
                     <div class="col-md-4 adjBtns">
-                        <button type="button" class="btn btn-default btn-lg" ng-click="edit(task)">
+                        <button type="button" class="btn btn-default" ng-click="edit(task)">
                             <span class="glyphicon glyphicon-edit"></span>
                         </button><br />
-                        <button type="button" class="btn btn-default btn-lg" ng-click="deleteTask(task)">
+                        <button type="button" class="btn btn-default" ng-click="deleteTask(task)">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </div>
@@ -103,7 +104,25 @@
             <div class="row">
                 <div class="col-md-2">Completed after:</div>
                 <div class="col-md-4">
-                    <input type="text" ng-model="inspectionTask.CompletedAfter" />
+                    <table>
+                        <tr>
+                            <td style="width:12px;padding:0px" >
+                                <input type="radio" style="width:12px;" value="counter" name="completedAfter"/>
+                            </td>
+                            <td style="width:150px;padding:0px">
+                                <input style="width:150px" type="text" ng-model="inspectionTask.CompletedAfter" />
+                            </td>
+                            <td>
+                                hits
+                            </td>
+                            <td style="width:12px;padding:0px" >
+                                <input type="radio" style="width:12px;" value="never" name="completedAfter"/>
+                            </td>
+                            <td>
+                                Never
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 

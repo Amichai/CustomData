@@ -20,7 +20,19 @@ function TodoCtrl($scope, $http) {
         resetTabs();
         $scope.home_active = "active";
     }
-    $scope.inspectionTask;   
+    $scope.inspectionTask;
+
+    function resetInspectionTask() {
+        $scope.inspectionTask = new Object();
+        $scope.inspectionTask.Name = '';
+        $scope.inspectionTask.Description = '';
+        $scope.inspectionTask.CompletedAfter = 100;
+        $scope.inspectionTask.HitCount = 0;
+
+    }
+
+    resetInspectionTask();
+
 
     $scope.taskClick = function (task) {
         task.HitCount++;
@@ -39,6 +51,45 @@ function TodoCtrl($scope, $http) {
         });
     }
 
+    function swap(array_object, index_a, index_b) {
+        var temp = array_object[index_a];
+        array_object[index_a] = array_object[index_b];
+        array_object[index_b] = temp;
+    }
+
+    $scope.moveDown = function (task) {
+        var swapIndex = -1;
+        for (var i = 0; i < $scope.Tasks.length - 1; i++) {
+            if ($scope.Tasks[i].ID == task.ID) {
+                swapIndex = i;
+                break;
+            }
+        }
+
+        if (swapIndex == -1) {
+            return;
+        }
+
+        swap($scope.Tasks, swapIndex, swapIndex + 1);
+    }
+
+    $scope.moveUp = function (task) {
+        var swapIndex = -1;
+        for (var i = 1; i < $scope.Tasks.length; i++) {
+            if ($scope.Tasks[i].ID == task.ID) {
+                swapIndex = i;
+                break;
+            }
+        }
+
+        console.log(i);
+        if (swapIndex == -1) {
+            return;
+        }
+
+        swap($scope.Tasks, swapIndex, swapIndex -1);
+    }
+
     $scope.edit = function (task) {
         $scope.inspectionTask = task;
         resetTabs();
@@ -50,10 +101,11 @@ function TodoCtrl($scope, $http) {
         $scope.create_active = "";
         $scope.data_active = "";
     }
-
+    
     $scope.home = function () {
         resetTabs();
         $scope.home_active = "active";
+        resetInspectionTask();
     }
 
     $scope.create = function () {
