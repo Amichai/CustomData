@@ -1,4 +1,4 @@
-function TodoCtrl($scope, $http) {
+﻿function TodoCtrl($scope, $http) {
     $scope.home_active = "active";
     $scope.create_active = "";
     $scope.data_active = "";
@@ -27,8 +27,8 @@ function TodoCtrl($scope, $http) {
         });
     };
     $scope.deleteTask = function (task) {
-        for(var i = $scope.Tasks.length - 1; i >= 0; i--) {
-            if($scope.Tasks[i].ID == task.ID) {
+        for (var i = $scope.Tasks.length - 1; i >= 0; i--) {
+            if ($scope.Tasks[i].ID == task.ID) {
                 $scope.Tasks.splice(i, 1);
             }
         }
@@ -42,27 +42,27 @@ function TodoCtrl($scope, $http) {
     }
     $scope.moveDown = function (task) {
         var swapIndex = -1;
-        for(var i = 0; i < $scope.Tasks.length - 1; i++) {
-            if($scope.Tasks[i].ID == task.ID) {
+        for (var i = 0; i < $scope.Tasks.length - 1; i++) {
+            if ($scope.Tasks[i].ID == task.ID) {
                 swapIndex = i;
                 break;
             }
         }
-        if(swapIndex == -1) {
+        if (swapIndex == -1) {
             return;
         }
         swap($scope.Tasks, swapIndex, swapIndex + 1);
     };
     $scope.moveUp = function (task) {
         var swapIndex = -1;
-        for(var i = 1; i < $scope.Tasks.length; i++) {
-            if($scope.Tasks[i].ID == task.ID) {
+        for (var i = 1; i < $scope.Tasks.length; i++) {
+            if ($scope.Tasks[i].ID == task.ID) {
                 swapIndex = i;
                 break;
             }
         }
         console.log(i);
-        if(swapIndex == -1) {
+        if (swapIndex == -1) {
             return;
         }
         swap($scope.Tasks, swapIndex, swapIndex - 1);
@@ -90,4 +90,24 @@ function TodoCtrl($scope, $http) {
         resetTabs();
         $scope.data_active = "active";
     };
+    $scope.toggleSelected = function (task) {
+        if (task.selected == 'undefined') {
+            task.selected = true;
+        } else {
+            task.selected = !task.selected;
+        }
+    };
+    $scope.dateMin;
+    $scope.dateMax;
+
+    $scope.plot = function () {
+        var indicies = $.find('.selected > input').map(function (n) { return n.value; });
+        if (indicies.length == 0) {
+            return;
+        }
+        var url = urlRoot + 'api/taskapi/getHits';
+        $http.post(url, indicies).success(function (result) {
+            debugger;
+        });
+    }
 }

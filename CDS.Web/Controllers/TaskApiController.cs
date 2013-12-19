@@ -86,5 +86,22 @@ namespace CDS.Web.Controllers
             });
             db.SaveChanges();
         }
+
+        [HttpPost]
+        public List<HitData> getHits(List<int> indicies) {
+            var db = GetDataContext();
+            Dictionary<int ,HitData> result = new Dictionary<int, HitData>();
+            foreach (var h in db.TaskHits) {
+                var taskID = h.Task;
+                if (!indicies.Contains(taskID)) {
+                    continue;
+                }
+                if (!result.ContainsKey(taskID)) {
+                    result[taskID] = new HitData() { ID = taskID };
+                }
+                result[taskID].Times.Add(h.Timestamp);
+            }
+            return result.Values.ToList();
+        }
     }
 }

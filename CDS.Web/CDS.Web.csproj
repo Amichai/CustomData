@@ -172,6 +172,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ButtonTask.cs" />
+    <Compile Include="Models\HitData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task.cs">
       <DependentUpon>TaskCollectorModel.tt</DependentUpon>
@@ -295,6 +296,13 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TaskCollectorModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="Scripts\linqjs\jquery.linq-vsdoc.js" />
+    <Content Include="Scripts\AngularControllers\MainController.js" />
+    <Content Include="Scripts\linqjs\jquery.linq.js" />
+    <Content Include="Scripts\linqjs\jquery.linq.min.js" />
+    <None Include="Scripts\linqjs\linq-vsdoc.js" />
+    <Content Include="Scripts\linqjs\linq.js" />
+    <Content Include="Scripts\linqjs\linq.min.js" />
     <Content Include="TaskCollectorModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TaskCollectorModel.edmx</DependentUpon>
@@ -307,10 +315,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TaskCollectorModel.edmx</DependentUpon>
       <LastGenOutput>TaskCollectorModel.cs</LastGenOutput>
-    </Content>
-    <TypeScriptCompile Include="Scripts\AngularControllers\MainController.ts" />
-    <Content Include="Scripts\AngularControllers\MainController.js">
-      <DependentUpon>MainController.ts</DependentUpon>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

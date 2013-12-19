@@ -4,27 +4,38 @@
 <link href="~/Content/bootstrap.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-1.9.1.js"></script>
 <script src="~/Scripts/bootstrap.js"></script>
+
 <style type="text/css">
+    .noSelect {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
     .inputButton {
         text-align: center;
         border: 2px solid black;
         margin: 15px;
         background-color: lightgray;
-        -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;
     }
 
     .adjBtns {
-        padding-top:37px;
+        padding-top: 37px;
     }
 
     .padding {
         padding: 10px;
-        margin:10px;
+        margin: 10px;
     }
 
     .navTab {
-        font-size:20px;
-        font-weight:bold;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .selected {
+        background-color: red !important;
     }
 
     #progressbar {
@@ -55,35 +66,40 @@
         <div id="home" ng:show="home_active == 'active'">
             <div ng-repeat="task in Tasks">
                 <div class="row">
-                    <div class="col-md-1 adjBtns" style="vertical-align:central" unselectable='on'
+                    <div class="col-md-1 adjBtns" style="vertical-align: central" unselectable='on'
                         onselectstart="return false;" onmousedown="return false;">
                         <button type="button" class="btn btn-default" ng-click="moveUp(task)">
                             <span class="glyphicon glyphicon-arrow-up"></span>
-                        </button><br />
+                        </button>
+                        <br />
                         <button type="button" class="btn btn-default" ng-click="moveDown(task)">
                             <span class="glyphicon glyphicon-arrow-down"></span>
                         </button>
-                    </div>                    
-                    <div class="inputButton col-md-4" ng-click="taskClick(task)">
+                    </div>
+                    <div class="noSelect inputButton col-md-4" ng-click="taskClick(task)">
                         <h3>{{task.Name}}</h3>
                         <p>{{task.Description}}</p>
                         <p>{{task.HitCount}} / {{task.CompletedAfter}}</p>
                         <div id="progressbar">
                             <div ng-if="task.ProgressVal <= 100" ng-style="{ width: task.ProgressVal + '%' }"></div>
-                            <div ng-if="task.ProgressVal > 100" style="width:100%"></div>
+                            <div ng-if="task.ProgressVal > 100" style="width: 100%"></div>
 
                         </div>
                     </div>
                     <div class="col-md-4 adjBtns">
                         <button type="button" class="btn btn-default" ng-click="edit(task)">
                             <span class="glyphicon glyphicon-edit"></span>
-                        </button><br />
+                        </button>
+                        <br />
                         <button type="button" class="btn btn-default" ng-click="deleteTask(task)">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </div>
                 </div>
             </div>
+            <button type="button" class="btn btn-default btn-lg" style="margin-left: 220px" ng-click="create()">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
         </div>
 
         <div id="create" ng:show="create_active == 'active'" class="padding">
@@ -106,20 +122,18 @@
                 <div class="col-md-4">
                     <table>
                         <tr>
-                            <td style="width:12px;padding:0px" >
-                                <input type="radio" style="width:12px;" value="counter" name="completedAfter"/>
+                            <td style="width: 12px; padding: 0px">
+                                <input type="radio" style="width: 12px;" value="counter" checked="true" name="completedAfter" />
                             </td>
-                            <td style="width:150px;padding:0px">
-                                <input style="width:150px" type="text" ng-model="inspectionTask.CompletedAfter" />
+                            <td style="width: 150px; padding: 0px">
+                                <input style="width: 150px" type="text" ng-model="inspectionTask.CompletedAfter" />
                             </td>
-                            <td>
-                                hits
+                            <td>hits
                             </td>
-                            <td style="width:12px;padding:0px" >
-                                <input type="radio" style="width:12px;" value="never" name="completedAfter"/>
+                            <td style="width: 12px; padding: 0px">
+                                <input type="radio" style="width: 12px;" value="never" name="completedAfter" />
                             </td>
-                            <td>
-                                Never
+                            <td>Never
                             </td>
                         </tr>
                     </table>
@@ -133,12 +147,29 @@
                 </div>
             </div>
 
-            <button type="button" class="btn padding"  ng-click="submitTask()">Save Changes / Create</button>
+            <button type="button" class="btn padding" ng-click="submitTask()">Save Changes / Create</button>
         </div>
 
 
         <div id="data" ng:show="data_active == 'active'">
-            <h2>testing2</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div ng-repeat="task in Tasks">
+                        <div style="background: lightgray; margin: 10px"
+                            class="noSelect"
+                            ng-click="toggleSelected(task)"
+                            ng-class="{'not-selected': !task.selected, 'selected': task.selected}">
+                            {{task.Name}} - {{task.Description}}
+                            <input type="hidden" value="{{task.ID}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div id="chart"></div>
+                </div>
+            </div>
+            <button type="button" class="btn padding" ng-click="plot()">Plot</button>
+
         </div>
     </div>
 </body>
