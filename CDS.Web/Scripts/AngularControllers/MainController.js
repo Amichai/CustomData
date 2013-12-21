@@ -1,4 +1,4 @@
-﻿function TodoCtrl($scope, $http) {
+﻿function TaskCtrl($scope, $http) {
     $scope.home_active = "active";
     $scope.create_active = "";
     $scope.data_active = "";
@@ -107,7 +107,7 @@
         }
         var url = urlRoot + 'api/taskapi/getHits';
         $http.post(url, indicies).success(function (result) {
-            debugger;
+            chart1(result);
         });
     }
 }
