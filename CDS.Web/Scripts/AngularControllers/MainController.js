@@ -107,7 +107,7 @@
         }
         var url = urlRoot + 'api/taskapi/getHits';
         $http.post(url, indicies).success(function (result) {
-            chart1(result);
+            chart2(result);
         });
     }
 }
