@@ -72,7 +72,7 @@
             <div ng-repeat="task in Tasks">
                 <table>
                     <tr>
-                        <td style="width:10px">
+                        <td style="width: 10px">
                             <div class="adjBtns" style="vertical-align: central;" unselectable='on'
                                 onselectstart="return false;" onmousedown="return false;">
                                 <button type="button" class="btn btn-default" ng-click="moveUp(task)">
@@ -84,9 +84,8 @@
                                 </button>
                             </div>
                         </td>
-                        <td style="width:320px">
-                            <div class="noSelect inputButton" 
-                                
+                        <td style="width: 320px">
+                            <div class="noSelect inputButton"
                                 ng-click="taskClick(task)">
 
                                 <h3>{{task.Name}}</h3>
@@ -100,8 +99,8 @@
                             </div>
 
                         </td>
-                        <td style="width:10px">
-                            <div class="adjBtns" >
+                        <td style="width: 10px">
+                            <div class="adjBtns">
                                 <button type="button" class="btn btn-default" ng-click="edit(task)">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </button>
@@ -114,80 +113,82 @@
                     </tr>
                 </table>
             </div>
-           <button type="button" class="btn btn-default btn-lg" style="margin-left: 178px" ng-click="create()">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
+            <button type="button" class="btn btn-default btn-lg" style="margin-left: 178px" ng-click="create()">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
         </div>
-    
+
         <div id="create" ng:show="create_active == 'active'" class="padding">
-        <div class="row">
-            <div class="col-md-2">Name:</div>
-            <div class="col-md-4">
-                <input type="text" ng-model="inspectionTask.Name" />
+            <div class="row">
+                <div class="col-md-2">Name:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.Name" />
+                </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-2">Description:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.Description" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">Completed after:</div>
+                <div class="col-md-4">
+                    <table>
+                        <tr>
+                            <td style="width: 12px; padding: 0px">
+                                <input type="radio" style="width: 12px;" value="counter" checked="true" name="completedAfter" />
+                            </td>
+                            <td style="width: 150px; padding: 0px">
+                                <input style="width: 150px" type="text" ng-model="inspectionTask.CompletedAfter" />
+                            </td>
+                            <td>hits
+                            </td>
+                            <td style="width: 12px; padding: 0px">
+                                <input type="radio" style="width: 12px;" value="never" name="completedAfter" />
+                            </td>
+                            <td>Never
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">Hit Count:</div>
+                <div class="col-md-4">
+                    <input type="text" ng-model="inspectionTask.HitCount" />
+                </div>
+            </div>
+
+            <button type="button" class="btn padding" ng-click="submitTask()">Save Changes / Create</button>
         </div>
 
-        <div class="row">
-            <div class="col-md-2">Description:</div>
-            <div class="col-md-4">
-                <input type="text" ng-model="inspectionTask.Description" />
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-2">Completed after:</div>
-            <div class="col-md-4">
-                <table>
-                    <tr>
-                        <td style="width: 12px; padding: 0px">
-                            <input type="radio" style="width: 12px;" value="counter" checked="true" name="completedAfter" />
-                        </td>
-                        <td style="width: 150px; padding: 0px">
-                            <input style="width: 150px" type="text" ng-model="inspectionTask.CompletedAfter" />
-                        </td>
-                        <td>hits
-                        </td>
-                        <td style="width: 12px; padding: 0px">
-                            <input type="radio" style="width: 12px;" value="never" name="completedAfter" />
-                        </td>
-                        <td>Never
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-2">Hit Count:</div>
-            <div class="col-md-4">
-                <input type="text" ng-model="inspectionTask.HitCount" />
-            </div>
-        </div>
-
-        <button type="button" class="btn padding" ng-click="submitTask()">Save Changes / Create</button>
-    </div>
-
-
-    <div id="data" ng:show="data_active == 'active'">
-        <div class="row">
-            <div class="col-md-4">
-                <div ng-repeat="task in Tasks">
-                    <div style="background: lightgray; margin: 10px"
-                        class="noSelect"
-                        ng-click="toggleSelected(task)"
-                        ng-class="{'not-selected': !task.selected, 'selected': task.selected}">
-                        {{task.Name}} - {{task.Description}}
+        <div id="data" ng:show="data_active == 'active'">
+            <div class="row">
+                <div class="col-md-4">
+                    <div ng-repeat="task in Tasks">
+                        <div style="background: lightgray; margin: 10px"
+                            class="noSelect"
+                            ng-click="toggleSelected(task)"
+                            ng-class="{'not-selected': !task.selected, 'selected': task.selected}">
+                            {{task.Name}} - {{task.Description}}
                             <input type="hidden" value="{{task.ID}}" />
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <button type="button" class="btn padding" ng-click="plot()">Plot</button>
+            @*<div class="col-md-4">
+                    <div id="chart"></div>
+                </div>*@
+            <div>
                 <div id="chart"></div>
             </div>
         </div>
-        <button type="button" class="btn padding" ng-click="plot()">Plot</button>
-
-    </div>
     </div>
 </body>
 </html>

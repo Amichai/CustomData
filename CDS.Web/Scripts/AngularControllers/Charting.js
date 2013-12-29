@@ -9,14 +9,7 @@ function roundMinutes(date) {
 
 function chart2(result) {
     var data = new Array();
-    //data.push({ 'letter': 'a', 'frequency': .1 });
-    //data.push({ 'letter': 'b', 'frequency': .2 });
-    //data.push({ 'letter': 'c', 'frequency': .5 });
-    //data.push({ 'letter': 'd', 'frequency': .3 });
-    //data.push({ 'letter': 'e', 'frequency': .6 });
-    //data.push({ 'letter': 'f', 'frequency': .2 });
-    //data.push({ 'letter': 'g', 'frequency': .1 });
-    
+
     for (var r in result) {
         for (var h in result[r].Times) {
             var d = new Date(result[r].Times[h]);
@@ -45,8 +38,7 @@ function chart2(result) {
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .orient("left")
-        .ticks(10, "%");
+        .orient("left");
 
     var svg = d3.select("#chart").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -54,64 +46,38 @@ function chart2(result) {
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    //for (var i = 0; i < Object.keys(data).length ; i++) {
-    //    var key = Object.keys(data)[i];
-    //    var toAdd = new Object();
-    //    toAdd.letter = key;
-    //    toAdd.frequency = data[key];
-    //    data.push(toAdd)
-    //}
-
-    //d3.tsv("data.tsv", type, function (error, data) {
-
-    //x.domain(Object.keys(data).map(function (d) {
-    //    debugger;
-    //    return data[d].letter;
-    //}));
     x.domain(Object.keys(data));
-        //x.domain(data.map(function (d) { return d.letter; }));
     y.domain([0, d3.max(Object.keys(data), function (d) {
         return data[d];
     })]);
 
-    debugger;
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis)
-          .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("Frequency");
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Frequency");
 
-        //svg.selectAll(".bar")
-        //    .data(data)
-        //  .enter().append("rect")
-        //    .attr("class", "bar")
-        //    .attr("x", function (d) { return x(d.letter); })
-        //    .attr("width", x.rangeBand())
-        //    .attr("y", function (d) { return y(d.frequency); })
-        //    .attr("height", function (d) { return height - y(d.frequency); });
-
-        svg.selectAll(".bar")
-                .data(Object.keys(data))
-              .enter().append("rect")
-                .attr("class", "bar")
-                .attr("x", function (d) { return x(d); })
-                .attr("width", x.rangeBand())
-                .attr("y", function (d) { return y(data[d]); })
-                .attr("height", function (d) { return height - y(data[d]); });
-
-    //});
+    svg.selectAll(".bar")
+            .data(Object.keys(data))
+          .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function (d) { return x(d); })
+            .attr("width", x.rangeBand())
+            .attr("y", function (d) { return y(data[d]); })
+            .attr("height", function (d) { return height - y(data[d]); });
 
     function type(d) {
         d.frequency = +d.frequency;
+        debugger;
         return d;
     }
 
@@ -173,17 +139,6 @@ function chart1(result) {
         });
         return d;
     });
-    //d3.csv("dji.csv", function (error, csv) {
-    //    var data = d3.nest()
-    //      .key(function (d) { return d.Date; })
-    //      .rollup(function (d) { return (d[0].Close - d[0].Open) / d[0].Open; })
-    //      .map(csv);
-
-    //    rect.filter(function (d) { return d in data; })
-    //        .attr("class", function (d) { return "day " + color(data[d]); })
-    //      .select("title")
-    //        .text(function (d) { return d + ": " + percent(data[d]); });
-    //});
 
     function monthPath(t0) {
         var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),

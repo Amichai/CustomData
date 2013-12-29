@@ -2,11 +2,17 @@
     $scope.home_active = "active";
     $scope.create_active = "";
     $scope.data_active = "";
+
+    //$http.get(urlRoot + 'api/taskapi/ConnectionTest').success(function (result) {
+    //    console.log("Connection test: " + result);
+    //});
+
     $http.get(urlRoot + 'api/taskapi/getTasks').success(function (result) {
         $scope.Tasks = result;
     });
     $scope.submitTask = function () {
-        $http.post(urlRoot + 'api/taskapi/postTask', $scope.inspectionTask).success(function () {
+        $http.post(urlRoot + 'api/taskapi/postTask', $scope.inspectionTask).success(function (tasks) {
+            $scope.Tasks = tasks;
         });
         resetTabs();
         $scope.home_active = "active";

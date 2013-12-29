@@ -6,24 +6,27 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace CDS.Web.Controllers
-{
-    public class TaskApiController : ApiController
-    {
+namespace CDS.Web.Controllers {
+    public class TaskApiController : ApiController {
         public List<ButtonTask> GetTasks() {
-            var db = new TaskCollectorEntities();
             List<ButtonTask> taskSet = new List<ButtonTask>();
-            foreach (var t in db.Tasks.Where(i => i.Visibility != 2)) {
-                taskSet.Add(new ButtonTask() {
-                    ID = t.ID,
-                    CompletedAfter = t.CompletedAfter.Value,
-                    CompletionDisabled = TimeSpan.FromTicks(t.CompletionDisabled.Value),
-                    Description = t.Description,
-                    HitCount = t.HitCount,
-                    HitDisabled = TimeSpan.FromTicks(t.HitDisabled.Value),
-                    Name = t.Name,
-                    Visibility = t.Visibility
-                });
+            using (var db = new TaskCollectorEntities()) {
+                var user = User;
+                foreach (var userTask in db.UserTasks.Where(i => i.User == user.Identity.Name).ToList()) {
+                    var task = userTask.Task1;
+                    if (task.Visibility != 2) {
+                        taskSet.Add(new ButtonTask() {
+                            ID = task.ID,
+                            CompletedAfter = task.CompletedAfter.Value,
+                            CompletionDisabled = TimeSpan.FromTicks(task.CompletionDisabled.Value),
+                            Description = task.Description,
+                            HitCount = task.HitCount,
+                            HitDisabled = TimeSpan.FromTicks(task.HitDisabled.Value),
+                            Name = task.Name,
+                            Visibility = task.Visibility
+                        });
+                    }
+                }
             }
             return taskSet;
         }
@@ -41,7 +44,17 @@ namespace CDS.Web.Controllers
             return new TaskCollectorEntities();
         }
 
-        public void PostTask(ButtonTask t) {
+        [HttpGet]
+        public string ConnectionTest() {
+            string result = "";
+            try {
+            } catch (Exception ex) {
+                return ex.Message + " " + ex.InnerException.Message;
+            }
+            return result;
+        }
+
+        public List<ButtonTask> PostTask(ButtonTask t) {
             var db = GetDataContext();
             TaskVisibility vis = db.TaskVisibilities.First();
             if (t.ID != null) {
@@ -50,7 +63,7 @@ namespace CDS.Web.Controllers
                     var found = found1.Single();
                     Set(found, t, vis);
                     db.SaveChanges();
-                    return;
+                    return this.GetTasks();
                 }
             }
 
@@ -67,6 +80,7 @@ namespace CDS.Web.Controllers
             db.SaveChanges();
 
             t.ID = newTask.ID;
+            return this.GetTasks();
         }
 
         public void TaskDelete(ButtonTask task) {
@@ -90,7 +104,7 @@ namespace CDS.Web.Controllers
         [HttpPost]
         public List<HitData> getHits(List<int> indicies) {
             var db = GetDataContext();
-            Dictionary<int ,HitData> result = new Dictionary<int, HitData>();
+            Dictionary<int, HitData> result = new Dictionary<int, HitData>();
             foreach (var h in db.TaskHits) {
                 var taskID = h.Task;
                 if (!indicies.Contains(taskID)) {

@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44301</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -297,6 +297,10 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TaskCollectorModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="Properties\PublishProfiles\tasker - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\tasker - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\tasker - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\tasker - Web Deploy.pubxml" />
     <None Include="Scripts\linqjs\jquery.linq-vsdoc.js" />
     <Content Include="Scripts\AngularControllers\Charting.js" />
     <Content Include="Scripts\AngularControllers\MainController.js" />
@@ -668,9 +672,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>35281</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:5205/</IISUrl>
+          <IISUrl>https://localhost:44301/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
